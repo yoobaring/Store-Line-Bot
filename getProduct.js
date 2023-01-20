@@ -1,16 +1,22 @@
-let ss = SpreadsheetApp.openByUrl("ลิงค์ ที่อยู่ google sheets");
-let sheet = ss.getSheetByName("ชื่อตาราง");
-let sheet1 = ss.getSheetByName("ชื่อตาราง");
-let sheet2 = ss.getSheetByName("ชื่อตาราง");
+let ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1ABfiLoFgTeJ46IL3QLZoTEELraqJSM_1XWRqbjmza28/edit");
+let sheet = ss.getSheetByName("database");
+let sheet1 = ss.getSheetByName("products");
+let sheet2 = ss.getSheetByName("orders");
 
 function doPost(e) {
 
+// message ที่ได้จาก ผู้ใช้ไลน์ 
 let data = JSON.parse(e.postData.contents)
 let userMsg = data.originalDetectIntentRequest.payload.data.message.text;
 
-  let detail = userMsg.split(':')
-  let MsgPr = userMsg[0] == 'P'? userMsg : ''
-  let MsgSize = userMsg.split(" ")
+// let userMsg = 'รหัสสินค้า: P0008, ไซต์: xl, จำนวน: 2'
+// let userMsg = '+ ชื่อ นามสกุล : Aryoo baring + เบอร์ : 0988986679 + ที่อยู่ : ไวท์เฮ้าส์อพาร์ทเม้นท์ - B209 1819/232 ซ.ปริยานนท์ แขวงบางโพงพาง เขตยานนาวา จังหวัดกรุงเทพ 10120'
+
+
+      // Logic Format Message
+  let detail = userMsg.split(':') // เพื่อต้องการแยกรหัสสินค้า ไปเช็ค ['รหัสสินค้า:'] ['P0008, ไซต์:'] ['xl, จำนวน: 2']
+  let MsgPr = userMsg[0] == 'P'? userMsg : '' // เพื่อต้องการเช็ค ว่าเป็น รหัสสินค้าไหม เช่น P0001
+  let MsgSize = userMsg.split(" ") // เพื่อต้องการแยก Size สินค้า ไปเช็ค ว่าเป็น size ที่ต้องการมีกี่ตัว เช่น ['m'] ['4'] ['P0008']
      console.log(MsgSize, 'MsgSize')
 
      // ดึงข้อมูลของข้อมูลปุ่ม จาก database โดยเริ่มดึงจาก จาก A2 - A7 
@@ -113,29 +119,25 @@ let userMsg = data.originalDetectIntentRequest.payload.data.message.text;
      // console.log(order_)
      response = cardOrder(order_)
   }
-  else if(userMsg == 'คำสั่งซื้อ'){
-          let cus_or = sheet2.getRange(sheet2.getLastRow(),1,1, sheet2.getLastColumn()).getValues();
-          console.log(cus_or)
-          let name = cus_or[0][4].split(" ")
-          let detail_or = cus_or[0][7].split(":")
-          console.log(detail_or[3])
-          let address = detail_or[3].trim()
-          let name_add = detail_or[1].split('\n')[0].trim()
-          let phone = detail_or[2].split('\n')[0].trim()
-          let price = parseInt(cus_or[0][5])/parseInt(name[4]).toString()
-
-          let e = [ 
-              cus_or[0][3],
-              cus_or[0][4],
-              name[name.length-1],
-              price.toString(),
-              cus_or[0][5].toString(),
-              name_add,
-              phone, 
-              address,
-              cus_or[0][1],cus_or[0][8]]
-          console.log(e)
-            response = orderList(e)
+  else if(userMsg == 'คำสั่งซื้อของคุณล่าสุด'){
+    let cus_or = sheet2.getRange(sheet2.getLastRow(),1,1, sheet2.getLastColumn()).getValues();
+    let name = cus_or[0][4].split(" ")
+    let detail_or = cus_or[0][7].split(":")
+    let address = detail_or[3].trim()
+    let name_add = detail_or[1].split('\n')[0].trim()
+    let phone = detail_or[2].split('\n')[0].trim()
+    let price = parseInt(cus_or[0][5])/parseInt(name[name.length-1])
+    let e = [ 
+        cus_or[0][3],
+        cus_or[0][4],
+        name[name.length-1],
+        price.toString(),
+        cus_or[0][5].toString(),
+        name_add,
+        phone, 
+        address,
+        cus_or[0][1],cus_or[0][8]]
+      response = orderList(e)
   }
   else {
       let cus_ = sheet2.getRange(sheet2.getLastRow(),1,1).getValues()[0][0];
