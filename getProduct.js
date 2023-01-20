@@ -1,4 +1,4 @@
-let ss = SpreadsheetApp.openByUrl(" ");
+let ss = SpreadsheetApp.openByUrl("ใส่ที่อยู่ลิงค์ google sheets");
 let sheet = ss.getSheetByName("database");
 let sheet1 = ss.getSheetByName("products");
 let sheet2 = ss.getSheetByName("orders");
@@ -9,9 +9,14 @@ function doPost(e) {
 let data = JSON.parse(e.postData.contents)
 let userMsg = data.originalDetectIntentRequest.payload.data.message.text;
 
-// let userMsg = 'รหัสสินค้า: P0008, ไซต์: xl, จำนวน: 2'
+//let userMsg = 'สินค้าทั้งหมด'
+//let userMsg = 'ดูสินค้า'
+//let userMsg = 'ผู้ใหญ่(ชาย)'
+//let userMsg = 'P0008'
+//let userMsg = 'm 4 P0008'
+//let userMsg = 'รหัสสินค้า: P0008, ไซต์: xl, จำนวน: 2'
 // let userMsg = '+ ชื่อ นามสกุล : Aryoo baring + เบอร์ : 0988986679 + ที่อยู่ : ไวท์เฮ้าส์อพาร์ทเม้นท์ - B209 1819/232 ซ.ปริยานนท์ แขวงบางโพงพาง เขตยานนาวา จังหวัดกรุงเทพ 10120'
-
+//let userMsg = 'คำสั่งซื้อของคุณล่าสุด'
 
       // Logic Format Message
   let detail = userMsg.split(':') // เพื่อต้องการแยกรหัสสินค้า ไปเช็ค ['รหัสสินค้า:'] ['P0008, ไซต์:'] ['xl, จำนวน: 2']
