@@ -1,4 +1,4 @@
-let ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1ABfiLoFgTeJ46IL3QLZoTEELraqJSM_1XWRqbjmza28/edit");
+let ss = SpreadsheetApp.openByUrl(" ");
 let sheet = ss.getSheetByName("database");
 let sheet1 = ss.getSheetByName("products");
 let sheet2 = ss.getSheetByName("orders");
